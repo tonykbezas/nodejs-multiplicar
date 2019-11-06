@@ -1,0 +1,44 @@
+﻿sudo yum install -y qemu-kvm android-tools libstdc++.i686 zlib.i686
+URL=https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
+wget -q ${URL}/android-studio-ide-162.4069837-linux.zip
+sudo unzip -q android-studio-ide-162.4069837-linux.zip -d /opt/
+rm -f android-studio-ide-162.4069837-linux.zip
+cat <<EOF | sudo tee /usr/local/share/applications/android-studio.desktop
+[Desktop Entry]
+Type=Application
+Name=Android Studio
+Icon=/opt/android-studio/bin/studio.png
+Exec=/opt/android-studio/bin/studio.sh
+Terminal=false
+Categories=Development;IDE;
+EOF
+$ /opt/android-studio/bin/studio.sh
+qt
+sudo yum groupinstall "Development Tools"
+sudo yum install glibc-devel.i686
+tar xvjf gcc-4.8.1.tar.bz2
+cd gcc-4.8.1
+./contrib/download_prerequisites
+cd ..
+mkdir objdir
+cd objdir
+$PWD/../gcc-4.8.1/configure —prefix=$HOME/gcc-4.8.1
+make
+sudo make install
+sudo mv /usr/lib64/libstdc+''.so.6 /usr/lib64/libstdc.so.6.backup
+sudo cp -P /opt/gcc-4.8.1/lib64/libstdc.so.6 /usr/lib64
+sudo cp /opt/gcc-4.8.1/lib64/libstdc.so.6.0.18 /usr/lib64/
+sudo ldconfig -v
+sudo ./qt-linux-opensource-5.1.1-x86_64-offline.run
+sudo gedit /etc/profile.d/qt5.sh
+PATH=/opt/Qt5.1.1/5.1.1/gcc_64/bin:$PATH
+export PATH
+. /etc/profile.d/qt5.sh
+sudo gedit /usr/share/applications/DigiaQtOpenSource-qtcreator.desktop
+
+sudo yum install postgresql-server postgresql-contrib
+sudo postgresql-setup initdb
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+yum install gcc-c++ compat-gcc-32 compat-gcc-32-c++
